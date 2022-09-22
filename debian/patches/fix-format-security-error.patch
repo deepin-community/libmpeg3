@@ -1,0 +1,38 @@
+Description: Fix security related format errors.
+ Get the source building using -Wformat -Werrors=format-security,
+ to make it possible to build library with hardening enabled.
+Author: Petter Reinholdtsen <pere@debian.org>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- libmpeg3-1.8.orig/mpeg3tocutil.c
++++ libmpeg3-1.8/mpeg3tocutil.c
+@@ -1278,7 +1278,7 @@ void mpeg3_stop_toc(mpeg3_t *file)
+ 
+ // Store file information
+ 	PUT_INT32(FILE_INFO);
+-	fprintf(file->toc_fd, file->fs->path);
++	fputs(file->fs->path, file->toc_fd);
+ 	for(j = strlen(file->fs->path); j < MPEG3_STRLEN; j++)
+ 			fputc(0, file->toc_fd);
+ 	PUT_INT64(file->source_date);
+@@ -1309,7 +1309,7 @@ void mpeg3_stop_toc(mpeg3_t *file)
+ // Path
+ 		PUT_INT32(TITLE_PATH);
+ 
+-		fprintf(file->toc_fd, title->fs->path);
++		fputs(title->fs->path, file->toc_fd);
+ 
+ // Pad path with 0
+ 		for(j = strlen(title->fs->path); j < MPEG3_STRLEN; j++)

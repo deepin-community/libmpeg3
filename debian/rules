@@ -1,0 +1,37 @@
+#!/usr/bin/make -f
+# Sample debian/rules that uses debhelper.
+# GNU copyright 1997 to 1999 by Joey Hess.
+# Copyright 2002 David Martínez <ender@debian.org>
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+export DEB_BUILD_MAINT_OPTIONS=hardening=+all
+
+export DEB_CFLAGS_MAINT_APPEND=-Wall -Wextra -Wno-unused-function -W
+
+
+# shared library versions
+version=1.8
+major=2
+
+export version major
+
+
+%:
+	dh $@ -Smakefile
+
+override_dh_install:
+	mkdir -p  $(CURDIR)/debian/tmp/usr/lib/pkgconfig
+	sed "s/@VERSION@/$(version)/" < debian/pkgconfig.in > $(CURDIR)/debian/tmp/usr/lib/pkgconfig/libmpeg3.pc
+	dh_install
+
+
+
+DEB_COPYRIGHT_CHECK_IGNORE_REGEX = \
+	^\./\.git/.*|\./\.pc/.*|\./debian/.*|test\.toc$
+
+licensecheck:
+	licensecheck -i "$(DEB_COPYRIGHT_CHECK_IGNORE_REGEX)" --deb-machine -r . \
+		> debian/copyright_newhints
+	cmp debian/copyright_hints debian/copyright_newhints \
+		&& rm debian/copyright_newhints

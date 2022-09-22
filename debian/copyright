@@ -1,0 +1,49 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: libmpeg3
+Upstream-Contact: Heroine Virtual Ltd. <broadcast@earthling.net>
+Source: http://heroinewarrior.com/libmpeg3.php
+License: GPL-2+
+Files-Excluded:
+ mpeg3css.c
+ a52dec-*
+
+Files: *
+Copyright: 2008, Heroine Virtual Ltd. / Adam Williams <broadcast@earthling.net>
+License: GPL-2+
+
+Files: audio/bit_allocation.*
+ audio/exponents.*
+ audio/mantissa.*
+ audio/uncouple.*
+Copyright: 1999, Aaron Holtzman
+License: GPL-2+
+
+Files: audio/dct.c
+Copyright: Heroine Virtual Ltd. <broadcast@earthling.net>
+  1997, Mikko Tommila
+License: GPL-2+
+
+Files: debian/*
+Copyright: 2002-2006, David Martínez Moreno <ender@debian.org>
+ 2014, Petter Reinholdtsen <pere@hungry.com>
+ 2017, Manuel A. Fernandez Montecelo <manuel.montezelo@gmail.com>
+ 2021, IOhannes m zmölnig <umlaeute@debian.org>
+License: GPL-2+
+
+
+License: GPL-2+
+ This program is free software; you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the
+ Free Software Foundation; either version 2, or (at your option) any
+ later version.
+ .
+ This program is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ General Public License for more details.
+ .
+ On Debian systems, the complete text of the GNU General Public License
+ (GPL) version 2 can be found in "/usr/share/common-licenses/GPL-2".
+ .
+ You should have received a copy of the GNU General Public License along
+ with this program.  If not, see <http://www.gnu.org/licenses/>.

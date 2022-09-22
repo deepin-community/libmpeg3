@@ -1,0 +1,5 @@
+usr/lib
+usr/lib/pkgconfig
+usr/include/mpeg3
+usr/include/mpeg3/audio
+usr/include/mpeg3/video

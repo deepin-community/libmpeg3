@@ -1,0 +1,56 @@
+Source: libmpeg3
+Section: libs
+Priority: optional
+Maintainer: Debian Multimedia Maintainers <debian-multimedia@lists.debian.org>
+Uploaders:
+ Petter Reinholdtsen <pere@debian.org>,
+ IOhannes m zmölnig (Debian/GNU) <umlaeute@debian.org>,
+Standards-Version: 4.6.0
+Rules-Requires-Root: no
+Build-Depends:
+ debhelper-compat (= 13),
+ liba52-dev,
+Homepage: http://heroinewarrior.com/libmpeg3.php
+Vcs-Git: https://salsa.debian.org/multimedia-team/libmpeg3.git
+Vcs-Browser: https://salsa.debian.org/multimedia-team/libmpeg3
+
+Package: mpeg3-utils
+Architecture: any
+Section: utils
+Depends: ${misc:Depends}, ${shlibs:Depends},
+Description: MPEG streams decoding library (utilities)
+ LibMPEG3 is a versatile and high-performance library capable
+ of decoding both audio and video from many different MPEG formats.
+ .
+ This package includes several utilities for working with MPEG2 streams.
+
+Package: libmpeg3-2
+Architecture: any
+Multi-Arch: same
+Depends: ${misc:Depends}, ${shlibs:Depends},
+Description: MPEG streams decoding library
+ LibMPEG3 is a versatile and high-performance library capable
+ of decoding both audio and video from many different MPEG formats.
+ .
+ LibMPEG3 decodes several MPEG standards into uncompressed
+ data suitable for editing and playback. It currently decodes:
+ .
+  - MPEG-2 video
+  - MPEG-1 video
+  - mp3 audio
+  - mp2 audio
+  - ac3 audio
+  - MPEG-2 transport streams
+  - MPEG-2 program streams
+  - MPEG-1 program streams
+  - IFO files
+
+Package: libmpeg3-dev
+Architecture: any
+Multi-Arch: same
+Section: libdevel
+Depends: ${misc:Depends},
+ libmpeg3-2 (= ${binary:Version}),
+Description: Headers and static libraries for libMPEG3
+ Headers and static libraries for the libMPEG3 decoding
+ library. Refer to libmpeg3-2 package for description.

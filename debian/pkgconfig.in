@@ -1,0 +1,11 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/mpeg3
+
+Name: libmpeg3
+Description: Decoder of various derivatives of MPEG standards
+Requires: 
+Version: @VERSION@
+Libs: -L${libdir} -lmpeg3
+Cflags: -I${includedir} 

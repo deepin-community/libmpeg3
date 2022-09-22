@@ -1,0 +1,36 @@
+Description: Include <stdlib.h> to find free()
+ Avoid compiler warning and possible runtime problem.
+Author: Petter Reinholdtsen <pere@debian.org>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- libmpeg3-1.8.orig/audio/layer3.c
++++ libmpeg3-1.8/audio/layer3.c
+@@ -5,6 +5,7 @@
+ 
+ #include <stdio.h>
+ #include <string.h>
++#include <stdlib.h>
+ 
+ struct gr_info_s 
+ {
+--- libmpeg3-1.8.orig/audio/ac3.c
++++ libmpeg3-1.8/audio/ac3.c
+@@ -1,5 +1,6 @@
+ #include <stdint.h>
+ #include <stdio.h>
++#include <stdlib.h>
+ 
+ #include "a52.h"
+ #include "mpeg3private.h"

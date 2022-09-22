@@ -1,0 +1,29 @@
+Description: Correct fake mpeg3_decrypt_packet() implementation
+ The fake function do not match the real one.
+Author: Petter Reinholdtsen <pere@debian.org>
+Last-Update: 2014-05-28
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- libmpeg3-1.8.orig/mpeg3css_fake.c
++++ libmpeg3-1.8/mpeg3css_fake.c
+@@ -18,7 +18,7 @@ int mpeg3_get_keys(mpeg3_css_t *css, cha
+ 	return 1;
+ }
+ 
+-int mpeg3_decrypt_packet(mpeg3_css_t *css, unsigned char *sector)
++int mpeg3_decrypt_packet(mpeg3_css_t *css, unsigned char *sector, int offset)
+ {
+ 	return 1;
+ }

@@ -1,0 +1,42 @@
+Description: Add missing system include files.
+ Find getcwd() in mpeg3io.c.
+ Find gettimeofday() in mpeg3toc.c.
+Author: Petter Reinholdtsen <pere@debian.org>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+Index: libmpeg3-git/mpeg3io.c
+===================================================================
+--- libmpeg3-git.orig/mpeg3io.c	2014-05-28 08:45:21.759957076 +0200
++++ libmpeg3-git/mpeg3io.c	2014-05-28 09:36:04.262503577 +0200
+@@ -5,6 +5,7 @@
+ #include <stdint.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <unistd.h>
+ #include <sys/stat.h>
+ 
+ mpeg3_fs_t* mpeg3_new_fs(char *path)
+Index: libmpeg3-git/mpeg3toc.c
+===================================================================
+--- libmpeg3-git.orig/mpeg3toc.c	2014-05-28 09:36:01.470484451 +0200
++++ libmpeg3-git/mpeg3toc.c	2014-05-28 09:36:04.262503577 +0200
+@@ -10,6 +10,7 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include <stdlib.h>
++#include <sys/time.h>
+ 
+ 
+ 

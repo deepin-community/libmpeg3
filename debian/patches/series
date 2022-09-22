@@ -1,0 +1,11 @@
+debian-build-rules.patch
+alpha-largefile.patch
+prototype-free.patch
+fix-format-security-error.patch
+fix-video-alpha.patch
+fix-fake-css.patch
+handle-hdv-m2t.patch
+fix-format-strings.patch
+missing-include.patch
+missing-prototypes.patch
+header-comment-fix.patch

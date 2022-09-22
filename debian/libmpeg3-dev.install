@@ -1,0 +1,4 @@
+usr/include/*	usr/include/mpeg3/
+usr/lib/*.a	usr/lib/${DEB_HOST_MULTIARCH}
+usr/lib/*.so	usr/lib/${DEB_HOST_MULTIARCH}
+usr/lib/pkgconfig	usr/lib/${DEB_HOST_MULTIARCH}

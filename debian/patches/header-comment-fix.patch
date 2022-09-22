@@ -1,0 +1,29 @@
+Description: Fix typo in mpeg3protos.h comment
+ Avoid this warning from the compiler:
+   mpeg3protos.h:401:1: warning: "/*" within comment [-Wcomment]
+Author: Petter Reinholdtsen <pere@debian.org>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- libmpeg3-1.8.dfsg.orig/mpeg3protos.h
++++ libmpeg3-1.8.dfsg/mpeg3protos.h
+@@ -397,7 +397,7 @@ int mpeg3demux_open_title(mpeg3_demuxer_
+ /* Go to the absolute byte given */
+ int mpeg3demux_seek_byte(mpeg3_demuxer_t *demuxer, int64_t byte);
+ 
+-/* Seek to the title and cell containing the absolute byte of the 
++/* Seek to the title and cell containing the absolute byte of the */
+ /* demuxer. */
+ /* Called at the beginning of every packet. */
+ int mpeg3_seek_phys(mpeg3_demuxer_t *demuxer);

@@ -1,0 +1,369 @@
+Description: Fix format related warnings
+ Mostly changes from using the ll modifier to using the j modifier for int64_t
+ values, but some other issues too.  This get rid of most compiler warnings.
+Author: Petter Reinholdtsen <pere@debian.org>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+Index: libmpeg3-git/mpeg3tocutil.c
+===================================================================
+--- libmpeg3-git.orig/mpeg3tocutil.c	2014-05-28 07:31:42.509749645 +0200
++++ libmpeg3-git/mpeg3tocutil.c	2014-05-28 07:31:45.869772452 +0200
+@@ -293,7 +293,7 @@
+ 					file->video_eof[i] = read_int64(buffer, &position);
+ 					file->total_frame_offsets[i] = read_int32(buffer, &position);
+ 					file->frame_offsets[i] = malloc(file->total_frame_offsets[i] * sizeof(int64_t));
+-if(debug) printf("mpeg3_read_toc 62 %d %d %lld\n", 
++if(debug) printf("mpeg3_read_toc 62 %d %d %d\n", 
+ file->total_frame_offsets[i], position, buffer_size);
+ 					for(j = 0; j < file->total_frame_offsets[i]; j++)
+ 					{
+Index: libmpeg3-git/mpeg3ifo.c
+===================================================================
+--- libmpeg3-git.orig/mpeg3ifo.c	2014-05-28 07:31:42.509749645 +0200
++++ libmpeg3-git/mpeg3ifo.c	2014-05-28 07:31:45.869772452 +0200
+@@ -693,7 +693,7 @@
+ 	printf("finaltable\n");
+ 	for(i = 0; i < final_cells->total_cells; i++)
+ 	{
+-		printf(" vob id: %x cell id: %x start: %llx end: %llx program: %x\n", 
++		printf(" vob id: %x cell id: %x start: %jx end: %jx program: %x\n", 
+ 			final_cells->cells[i].vob_id, final_cells->cells[i].cell_id, (int64_t)final_cells->cells[i].start_byte, (int64_t)final_cells->cells[i].end_byte, final_cells->cells[i].program);
+ 	}
+ }
+@@ -808,7 +808,7 @@
+ 			else
+ 			{
+ 				fprintf(stderr, 
+-					"read_ifo: cell length and title length don't match! title=%d cell=%d cell_start=%llx cell_end=%llx.\n",
++					"read_ifo: cell length and title length don't match! title=%d cell=%d cell_start=%jx cell_end=%jx.\n",
+ 					current_title,
+ 					current_cell,
+ 					cell_start - title_start_byte,
+Index: libmpeg3-git/mpeg3peek.c
+===================================================================
+--- libmpeg3-git.orig/mpeg3peek.c	2014-05-28 07:31:42.509749645 +0200
++++ libmpeg3-git/mpeg3peek.c	2014-05-28 07:31:45.869772452 +0200
+@@ -21,7 +21,7 @@
+ 		exit(1);
+ 	}
+ 
+-	sscanf(argv[2], "%lld", &frame_number);
++	sscanf(argv[2], "%jd", &frame_number);
+ 	if(frame_number < 0) frame_number = 0;
+ 
+ 	file = mpeg3_open(argv[1], &error);
+@@ -45,7 +45,7 @@
+ 			int64_t chunk_number = frame_number / MPEG3_AUDIO_CHUNKSIZE;
+ 			if(chunk_number >= file->atrack[0]->total_sample_offsets)
+ 				chunk_number = file->atrack[0]->total_sample_offsets - 1;
+-			printf("sample=%lld offset=0x%llx\n",
++			printf("sample=%jd offset=0x%jx\n",
+ 				frame_number,
+ 				file->atrack[0]->sample_offsets[chunk_number]);
+ 			exit(0);
+@@ -59,7 +59,7 @@
+ 
+ 		if(frame_number >= file->vtrack[0]->total_frame_offsets)
+ 			frame_number = file->vtrack[0]->total_frame_offsets - 1;
+-		printf("frame=%lld offset=0x%llx\n", 
++		printf("frame=%jd offset=0x%jx\n", 
+ 			frame_number,
+ 			file->vtrack[0]->frame_offsets[frame_number]);
+ 	}
+Index: libmpeg3-git/mpeg3title.c
+===================================================================
+--- libmpeg3-git.orig/mpeg3title.c	2014-05-28 07:31:42.509749645 +0200
++++ libmpeg3-git/mpeg3title.c	2014-05-28 07:31:45.869772452 +0200
+@@ -53,14 +53,14 @@
+ {
+ 	int i;
+ 	
+-	printf("mpeg3_dump_title path %s %llx-%llx cell_table_size %d\n", 
++	printf("mpeg3_dump_title path %s %jx-%jx cell_table_size %d\n", 
+ 		title->fs->path, 
+ 		title->start_byte,
+ 		title->end_byte,
+ 		title->cell_table_size);
+ 	for(i = 0; i < title->cell_table_size; i++)
+ 	{
+-		printf("%llx-%llx %llx-%llx %x\n", 
++		printf("%jx-%jx %jx-%jx %x\n", 
+ 			title->cell_table[i].title_start, 
+ 			title->cell_table[i].title_end, 
+ 			title->cell_table[i].program_start, 
+@@ -147,7 +147,7 @@
+ 	title->total_bytes = mpeg3io_total_bytes(title->fs);
+ 	title->start_byte = 0;
+ 	title->end_byte = title->total_bytes;
+-if(debug) fprintf(stderr, "mpeg3_create_title %d path=%s total_bytes=%lld\n",
++if(debug) fprintf(stderr, "mpeg3_create_title %d path=%s total_bytes=%jd\n",
+ __LINE__, file->fs->path, title->total_bytes);
+ 
+ 
+@@ -191,11 +191,13 @@
+ 		{
+ 			cell = &title->cell_table[i];
+ 
+-			fprintf(output, "REGION: %llx-%llx %llx-%llx %f %f %d\n",
++			fprintf(output, "REGION: %jx-%jx %jx-%jx %f %f %d\n",
+ 				cell->program_start,
+ 				cell->program_end,
+ 				cell->title_start,
+ 				cell->title_end,
++				0.0,
++				0.0,
+ 				cell->program);
+ 		}
+ 	}
+Index: libmpeg3-git/mpeg3toc.c
+===================================================================
+--- libmpeg3-git.orig/mpeg3toc.c	2014-05-28 07:31:42.509749645 +0200
++++ libmpeg3-git/mpeg3toc.c	2014-05-28 07:31:45.869772452 +0200
+@@ -106,7 +106,7 @@
+ 			int64_t elapsed_seconds = current_time.tv_sec - start_time.tv_sec;
+ 			int64_t total_seconds = elapsed_seconds * total_bytes / bytes_processed;
+ 			int64_t eta = total_seconds - elapsed_seconds;
+-			fprintf(stderr, "%lld%% ETA: %dm%ds        \r", 
++			fprintf(stderr, "%jd%% ETA: %jdm%jds        \r", 
+ 				bytes_processed * 100 / total_bytes,
+ 				eta / 60,
+ 				eta % 60);
+@@ -122,7 +122,7 @@
+ 	int64_t elapsed = current_time.tv_sec - start_time.tv_sec;
+ 	if(verbose)
+ 	{
+-		fprintf(stderr, "%dm%ds elapsed           \n", 
++		fprintf(stderr, "%jdm%jds elapsed           \n", 
+ 			elapsed / 60,
+ 			elapsed % 60);
+ 	}
+Index: libmpeg3-git/mpeg3dump.c
+===================================================================
+--- libmpeg3-git.orig/mpeg3dump.c	2014-05-28 07:31:42.509749645 +0200
++++ libmpeg3-git/mpeg3dump.c	2014-05-28 07:31:45.869772452 +0200
+@@ -108,7 +108,7 @@
+ 				fprintf(stderr, "total_sample_offsets=%d\n", file->atrack[i]->total_sample_offsets);
+ 				for(j = 0; j < file->atrack[i]->total_sample_offsets; j++)
+ 				{
+-					fprintf(stderr, "%llx ", file->atrack[i]->sample_offsets[j]);
++					fprintf(stderr, "%jx ", file->atrack[i]->sample_offsets[j]);
+ 					if(j > 0 && !(j % 8)) fprintf(stderr, "\n");
+ 				}
+ 				fprintf(stderr, "\n");
+@@ -135,7 +135,7 @@
+ 				fprintf(stderr, "total_frame_offsets=%d\n", file->vtrack[i]->total_frame_offsets);
+ 				for(j = 0; j < file->vtrack[i]->total_frame_offsets; j++)
+ 				{
+-					fprintf(stderr, "%d=%llx ", j, file->vtrack[i]->frame_offsets[j]);
++					fprintf(stderr, "%d=%jx ", j, file->vtrack[i]->frame_offsets[j]);
+ 					if(j > 0 && !(j % 8)) fprintf(stderr, "\n");
+ 				}
+ 				fprintf(stderr, "\n");
+@@ -143,7 +143,7 @@
+ 				fprintf(stderr, "total_keyframe_numbers=%d\n", file->vtrack[i]->total_keyframe_numbers);
+ 				for(j = 0; j < file->vtrack[i]->total_keyframe_numbers; j++)
+ 				{
+-					fprintf(stderr, "%lld ", file->vtrack[i]->keyframe_numbers[j]);
++					fprintf(stderr, "%jd ", file->vtrack[i]->keyframe_numbers[j]);
+ 					if(j > 0 && !(j % 8)) fprintf(stderr, "\n");
+ 				}
+ 				fprintf(stderr, "\n");
+@@ -162,7 +162,7 @@
+ 			{
+ 				for(j = 0; j < strack->total_offsets; j++)
+ 				{
+-					printf("%llx ", strack->offsets[j]);
++					printf("%jx ", strack->offsets[j]);
+ 				}
+ 				printf("\n");
+ 			}
+@@ -172,7 +172,7 @@
+ 		fprintf(stderr, "total_titles=%d\n", file->demuxer->total_titles);
+ 		for(i = 0; i < file->demuxer->total_titles; i++)
+ 		{
+-			fprintf(stderr, "  Title path=%s total_bytes=%llx cell_table_size=%d\n", 
++			fprintf(stderr, "  Title path=%s total_bytes=%jx cell_table_size=%d\n", 
+ 				file->demuxer->titles[i]->fs->path,
+ 				file->demuxer->titles[i]->total_bytes, 
+ 				file->demuxer->titles[i]->cell_table_size);
+@@ -180,7 +180,7 @@
+ 			if(print_offsets)
+ 			{
+ 				for(j = 0; j < file->demuxer->titles[i]->cell_table_size; j++)
+-					fprintf(stderr, "    Cell: %llx-%llx %llx-%llx program=%d\n", 
++					fprintf(stderr, "    Cell: %jx-%jx %jx-%jx program=%d\n", 
+ 						file->demuxer->titles[i]->cell_table[j].program_start, 
+ 						file->demuxer->titles[i]->cell_table[j].program_end,
+ 						file->demuxer->titles[i]->cell_table[j].title_start, 
+Index: libmpeg3-git/mpeg3demux.c
+===================================================================
+--- libmpeg3-git.orig/mpeg3demux.c	2014-05-28 07:31:42.509749645 +0200
++++ libmpeg3-git/mpeg3demux.c	2014-05-28 07:31:45.869772452 +0200
+@@ -291,7 +291,7 @@
+ 
+ 		if(demuxer->dump)
+ 		{
+-			fprintf(stderr, "get_transport_pes_packet: offset=%llx 0x%x bytes AC3 custom_id=0x%x astream=0x%x do_audio=%d\n", 
++			fprintf(stderr, "get_transport_pes_packet: offset=%jx 0x%x bytes AC3 custom_id=0x%x astream=0x%x do_audio=%d\n", 
+ 				mpeg3io_tell(demuxer->titles[demuxer->current_title]->fs),
+ 				demuxer->raw_size - demuxer->raw_offset,
+ 				demuxer->custom_id,
+@@ -455,7 +455,7 @@
+ 
+ 			if(demuxer->dump)
+ 			{
+-				fprintf(stderr, "get_payload: offset=%llx 0x%x bytes AC3 pid=0x%x\n", 
++				fprintf(stderr, "get_payload: offset=%jx 0x%x bytes AC3 pid=0x%x\n", 
+ 					mpeg3io_tell(demuxer->titles[demuxer->current_title]->fs),
+ 					demuxer->raw_size - demuxer->raw_offset,
+ 					demuxer->pid);
+@@ -604,7 +604,7 @@
+ 
+ 	if(demuxer->dump)
+ 	{
+-		fprintf(stderr, "offset=0x%llx pid=0x%02x continuity=0x%02x padding=%d adaptation=%d unit_start=%d\n", 
++		fprintf(stderr, "offset=0x%jx pid=0x%02x continuity=0x%02x padding=%d adaptation=%d unit_start=%d\n", 
+ 			demuxer->program_byte,
+ 			demuxer->pid,
+ 			demuxer->continuity_counter,
+@@ -1261,7 +1261,7 @@
+ 				decryption_offset = mpeg3io_tell(title->fs) - demuxer->last_packet_start;
+ 				if(demuxer->dump)
+ 				{
+-					fprintf(stderr, " MP2 audio data offset=%llx custom_id=%x size=%x\n", 
++					fprintf(stderr, " MP2 audio data offset=%jx custom_id=%x size=%x\n", 
+ 						demuxer->program_byte, 
+ 						demuxer->custom_id,
+ 						pes_packet_length);
+@@ -1304,7 +1304,7 @@
+ 				decryption_offset = mpeg3io_tell(title->fs) - demuxer->last_packet_start;
+ 				if(demuxer->dump)
+ 				{
+-					fprintf(stderr, " video offset=%llx custom_id=%x size=%x\n", 
++					fprintf(stderr, " video offset=%jx custom_id=%x size=%x\n", 
+ 						demuxer->program_byte,
+ 						demuxer->custom_id,
+ 						pes_packet_length);
+@@ -1468,7 +1468,7 @@
+ /* Parse packet until the next packet start code */
+ 	while(!result && !mpeg3io_eof(title->fs))
+ 	{
+-if(debug)  fprintf(stderr, "mpeg3demux_read_program %d %d %x %llx\n", 
++if(debug)  fprintf(stderr, "mpeg3demux_read_program %d %d %jx %jx\n", 
+ __LINE__, 
+ result, 
+ title->fs->current_byte, 
+@@ -1479,7 +1479,7 @@
+ 		if(header == MPEG3_PACK_START_CODE)
+ 		{
+ 
+-if(debug) fprintf(stderr, "mpeg3demux_read_program %d %d %x %llx\n", 
++if(debug) fprintf(stderr, "mpeg3demux_read_program %d %d %jx %jx\n", 
+ __LINE__, 
+ result, 
+ title->fs->current_byte, 
+@@ -1495,7 +1495,7 @@
+ 			result = get_pack_header(demuxer);
+ 			pack_count++;
+ 
+-if(debug) fprintf(stderr, "mpeg3demux_read_program %d %d %x %llx\n", 
++if(debug) fprintf(stderr, "mpeg3demux_read_program %d %d %jx %jx\n", 
+ __LINE__, 
+ result, 
+ title->fs->current_byte, 
+@@ -1507,7 +1507,7 @@
+ 		if(header == MPEG3_SYSTEM_START_CODE && pack_count)
+ 		{
+ 
+-if(debug) fprintf(stderr, "mpeg3demux_read_program %d %d %x %llx\n", 
++if(debug) fprintf(stderr, "mpeg3demux_read_program %d %d %jx %jx\n", 
+ __LINE__, 
+ result, 
+ title->fs->current_byte, 
+@@ -1517,7 +1517,7 @@
+  			result = get_system_header(demuxer);
+ 
+ 
+-if(debug) fprintf(stderr, "mpeg3demux_read_program %d %d %x %llx\n", 
++if(debug) fprintf(stderr, "mpeg3demux_read_program %d %d %jx %jx\n", 
+ __LINE__, 
+ result, 
+ title->fs->current_byte, 
+@@ -1527,7 +1527,7 @@
+ 		else
+ 		if((header >> 8) == MPEG3_PACKET_START_CODE_PREFIX && pack_count)
+ 		{
+-if(debug) fprintf(stderr, "mpeg3demux_read_program %d %d %x %llx\n", 
++if(debug) fprintf(stderr, "mpeg3demux_read_program %d %d %jx %jx\n", 
+ __LINE__, 
+ result, 
+ title->fs->current_byte, 
+@@ -1536,7 +1536,7 @@
+ 
+ 			result = get_program_pes_packet(demuxer, header);
+ 
+-if(debug) fprintf(stderr, "mpeg3demux_read_program %d %d %x %llx\n", 
++if(debug) fprintf(stderr, "mpeg3demux_read_program %d %d %jx %jx\n", 
+ __LINE__, 
+ result, 
+ title->fs->current_byte, 
+@@ -1986,10 +1986,10 @@
+ /* Transport stream or elementary stream case */
+ 		if(file->packet_size > 0)
+ 		{
+-printf("mpeg3_read_prev_packet 1 result=%d title=%d tell=%llx program_byte=%llx\n", result, demuxer->current_title, mpeg3io_tell(title->fs), demuxer->program_byte);
++printf("mpeg3_read_prev_packet 1 result=%d title=%d tell=%jx program_byte=%jx\n", result, demuxer->current_title, mpeg3io_tell(title->fs), demuxer->program_byte);
+ 			demuxer->program_byte -= file->packet_size;
+ 			result = mpeg3_seek_phys(demuxer);
+-printf("mpeg3_read_prev_packet 100 result=%d title=%d tell=%llx program_byte=%llx\n", result, demuxer->current_title, mpeg3io_tell(title->fs), demuxer->program_byte);
++printf("mpeg3_read_prev_packet 100 result=%d title=%d tell=%jx program_byte=%jx\n", result, demuxer->current_title, mpeg3io_tell(title->fs), demuxer->program_byte);
+ 		}
+ 		else
+ 		{
+Index: libmpeg3-git/video/seek.c
+===================================================================
+--- libmpeg3-git.orig/video/seek.c	2014-05-28 07:31:42.509749645 +0200
++++ libmpeg3-git/video/seek.c	2014-05-28 07:31:45.869772452 +0200
+@@ -312,7 +312,7 @@
+ 		if(frame_number < 0) frame_number = 0;
+ 		if(frame_number > video->maxframe) frame_number = video->maxframe;
+ 
+-if(debug) printf("mpeg3video_seek %d %ld %ld\n", __LINE__, frame_number, video->framenum);
++if(debug) printf("mpeg3video_seek %d %ld %d\n", __LINE__, frame_number, video->framenum);
+ 
+ /* Seek to I frame in table of contents. */
+ /* Determine time between seek position and previous subtitle. */
+@@ -361,7 +361,7 @@
+ 						video->repeat_count = 0;
+ 
+ // Read up to current frame
+-if(debug) printf("mpeg3video_seek %d %ld %ld\n", __LINE__, frame_number, video->framenum);
++if(debug) printf("mpeg3video_seek %d %ld %d\n", __LINE__, frame_number, video->framenum);
+ 						mpeg3video_drop_frames(video, frame_number - video->framenum, 1);
+ if(debug) printf("mpeg3video_seek %d\n", __LINE__);
+ 						break;
+Index: libmpeg3-git/audio/ac3.c
+===================================================================
+--- libmpeg3-git.orig/audio/ac3.c	2014-05-28 07:31:42.509749645 +0200
++++ libmpeg3-git/audio/ac3.c	2014-05-28 07:31:45.869772452 +0200
+@@ -93,7 +93,7 @@
+ 				audio->channels += 2;
+ 				break;
+ 			default:
+-				printf("mpeg3_ac3_header: unknown channel code: %p\n", audio->flags & A52_CHANNEL_MASK);
++				printf("mpeg3_ac3_header: unknown channel code: %x\n", audio->flags & A52_CHANNEL_MASK);
+ 				break;
+ 		}
+ 	}

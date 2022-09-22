@@ -1,0 +1,27 @@
+Description: Recognize HDV files that have a .m2t file extension.
+ Patch from Dan Streetman and Johannes Sixt via the Cinelerra project.
+Author: Petter Reinholdtsen <pere@debian.org>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- libmpeg3-1.8.orig/libmpeg3.c
++++ libmpeg3-1.8/libmpeg3.c
+@@ -229,6 +229,7 @@ int mpeg3_check_sig(char *path)
+ 				strncasecmp(ext, ".mpg", 4) &&
+ 				strncasecmp(ext, ".vob", 4) &&
+ 				strncasecmp(ext, ".mpeg", 4) &&
++				strncasecmp(ext, ".m2t", 4) &&
+ 				strncasecmp(ext, ".ac3", 4))
+ 				result = 0;
+ 		}
